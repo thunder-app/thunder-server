@@ -21,8 +21,7 @@
   <a href="#overview">Overview</a> •
   <a href="#features">Features</a> •
   <a href="#quick-setup-guide">Quick Setup</a> •
-  <a href="#environment-configuration">Configuration</a> •
-  <a href="#contributing">Contributing</a>
+  <a href="#environment-configuration">Configuration</a>
 </p>
 
 ## Overview

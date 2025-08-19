@@ -12,7 +12,7 @@ import sequelize from "./database/database";
 import AccountNotification from "./database/models/account_notification";
 
 // Notification service
-import { addAccountNotification, generateTestNotification } from "./notifications/notifications";
+import { addAccountNotification, deleteAccountNotification, generateTestNotification } from "./notifications/notifications";
 import { notificationService, checkNotifications } from "./notifications/service/notification_service";
 
 dotenv.config({ quiet: true });
@@ -47,14 +47,12 @@ app.post("/notifications", async (req: Request, res: Response) => {
   }
 });
 
-app.delete("/notifications", (req, res) => {
+app.delete("/notifications", async (req, res) => {
   const { jwts } = req.body as DeleteNotificationRequest;
   if (!jwts) return res.status(400).send("Missing one or more required parameters");
 
   try {
-    for (const jwt of jwts) {
-      let notification = AccountNotification.destroy({ where: { jwt } });
-    }
+    for (const jwt of jwts) await deleteAccountNotification(jwt);
 
     res.status(200).json({ message: "Account notifications deleted successfully" });
   } catch (error) {
