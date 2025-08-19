@@ -1,3 +1,5 @@
+import { detectPlatformFromNodeInfo } from "./utils/instance";
+
 import AccountNotification from "../database/models/account_notification";
 
 /**
@@ -9,7 +11,15 @@ import AccountNotification from "../database/models/account_notification";
  *
  * @returns the created AccountNotification record
  */
-async function addAccountNotification(type: string, token: string, jwt: string, instance: string): Promise<AccountNotification> {
+async function addAccountNotification(type: string, token: string, jwt: string, instance: string): Promise<AccountNotification | null> {
+  // Check the platform of the instance
+  const platform = await detectPlatformFromNodeInfo(instance);
+
+  if (platform !== 'lemmy') {
+    console.error(`Invalid Lemmy instance: ${instance}. Skipping...`);
+    return null;
+  }
+
   // First, check to see if the Notification record already exists for a given [jwt]
   let existingAccountNotification = await AccountNotification.findOne({ where: { jwt } });
 

@@ -38,7 +38,7 @@ app.post("/notifications", async (req: Request, res: Response) => {
     const results = [];
 
     let notification = await addAccountNotification(type, token, jwt, instance);
-    results.push(notification.toJSON());
+    if (notification) results.push(notification.toJSON());
 
     res.status(201).json(results);
   } catch (error) {
