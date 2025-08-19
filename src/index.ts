@@ -66,6 +66,9 @@ app.post("/test", async (req: Request, res: Response) => {
   if (!jwt) return res.status(400).send("Missing one or more required parameters");
 
   try {
+    let notification = await AccountNotification.findOne({ where: { jwt } });
+    if (!notification) return res.status(404).send("Unable to send test notification - no record was found for the current account");
+
     let result = await generateTestNotification(jwt);
 
     res.status(201).json(result);
